@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=QVPlayer
+Comment=Vkontakte audio player
+Exec=qvplayer
+TryExec=qvplayer
+Terminal=false
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false
+Icon=qvplayer.png
