@@ -4,12 +4,10 @@ project(qvplayer)
 
 set(qvplayer_SOURCES
     src/main.cpp
-    src/qvplayer.cpp
-    src/qaudiolistmodel.cpp)
+    src/qvplayer.cpp)
 
 set(qvplayer_HEADERS
-    src/qvplayer.h
-    src/qaudiolistmodel.h)
+    src/qvplayer.h)
 
 set(qvplayer_FORMS
     ui/qvplayer.ui)
