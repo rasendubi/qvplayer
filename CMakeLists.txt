@@ -20,6 +20,9 @@ find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
 
+find_package(Phonon REQUIRED)
+include_directories(${PHONON_INCLUDES})
+
 qt4_wrap_cpp(qvplayer_MOC_SOURCES ${qvplayer_HEADERS})
 qt4_wrap_ui(qvplayer_UI_SOURCES ${qvplayer_FORMS})
 qt4_add_resources(qvplayer_RESOURCES ${qvplayer_QRC})
@@ -28,7 +31,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(qvplayer ${qvplayer_SOURCES} ${qvplayer_MOC_SOURCES} ${qvplayer_UI_SOURCES}
                         ${qvplayer_HEADERS} ${qvplayer_RESOURCES})
-target_link_libraries(qvplayer ${QT_LIBRARIES} qtvk phonon)
+target_link_libraries(qvplayer ${QT_LIBRARIES} qtvk ${PHONON_LIBRARY})
 
 install(TARGETS qvplayer 
         RUNTIME DESTINATION bin)
