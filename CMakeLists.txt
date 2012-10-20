@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 2.8)
 
 project(qvplayer)
 
+set(qvplayer_MAJOR_VERSION 0)
+set(qvplayer_MINOR_VERSION 1)
+set(qvplayer_PATCH_VERSION 4)
+set(qvplayer_VERSION
+  "${qvplayer_MAJOR_VERSION}.${qvplayer_MINOR_VERSION}.${qvplayer_PATCH_VERSION}")
+
 set(qvplayer_SOURCES
     src/main.cpp
     src/qvplayer.cpp)
@@ -50,7 +56,7 @@ include(InstallRequiredSystemLibraries)
 
 set(CPACK_PACKAGE_NAME "qvplayer")
 set(CPACK_PACKAGE_VENDOR "Alexey Shmalko")
-set(CPACK_PACKAGE_VERSION "0.1.3")
+set(CPACK_PACKAGE_VERSION ${qvplayer_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Vkontakte audio player.")
 set(CPACK_PACKAGE_DESCRIPTION "Vkontakte audio player.")
 set(CPACK_GENERATOR "DEB;TBZ2")
