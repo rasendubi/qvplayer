@@ -67,7 +67,8 @@ private:
           *preAction,
           *searchAction,
           *reloadAction,
-          *showHideAction;
+          *showHideAction,
+          *shuffleAction;
   
 private:
   virtual void closeEvent(QCloseEvent* );
@@ -83,6 +84,7 @@ private slots:
   void audioPre();
   void audioNext();
   void audioReload();
+  void listShuffle();
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
   void searchClicked();
   void getFriends();

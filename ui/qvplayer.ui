@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
+    <width>530</width>
     <height>299</height>
    </rect>
   </property>
@@ -151,7 +151,7 @@
       </widget>
      </item>
      <item>
-      <widget class="Phonon::SeekSlider" name="seekSlider">
+      <widget class="Phonon::SeekSlider" name="seekSlider" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>1</horstretch>
@@ -163,13 +163,10 @@
          <pointsize>5</pointsize>
         </font>
        </property>
-       <property name="iconVisible">
+       <property name="iconVisible" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="iconSize">
+       <property name="iconSize" stdset="0">
         <size>
          <width>16</width>
          <height>16</height>
@@ -188,19 +185,6 @@
       </widget>
      </item>
      <item>
-      <widget class="Phonon::VolumeSlider" name="volumeSlider">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="muteVisible">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QToolButton" name="reloadButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
@@ -210,6 +194,29 @@
        </property>
        <property name="text">
         <string>Reload</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Phonon::VolumeSlider" name="volumeSlider" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="muteVisible" stdset="0">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="shuffleButton">
+       <property name="text">
+        <string>Shuffle</string>
        </property>
        <property name="autoRaise">
         <bool>true</bool>

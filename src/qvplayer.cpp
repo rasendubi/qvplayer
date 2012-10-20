@@ -31,6 +31,7 @@
 #include <qtvk/audio/get.h>
 #include <qtvk/friends/get.h>
 #include <qtvk/vkauth.h>
+#include <utility>
 
 QVPlayer::QVPlayer(QWidget *parent) :
   QWidget(parent),
@@ -83,12 +84,13 @@ QVPlayer::QVPlayer(QWidget *parent) :
   
   //ui->userView->hide();
   
-  ui->playButton->setDefaultAction(playAction);
-  ui->preButton->setDefaultAction(preAction);
-  ui->nextButton->setDefaultAction(nextAction);
-  ui->searchButton->setDefaultAction(searchAction);
-  ui->reloadButton->setDefaultAction(reloadAction);
-  ui->muteButton->setDefaultAction(muteAction);
+  ui->playButton   ->setDefaultAction(playAction);
+  ui->preButton    ->setDefaultAction(preAction);
+  ui->nextButton   ->setDefaultAction(nextAction);
+  ui->searchButton ->setDefaultAction(searchAction);
+  ui->reloadButton ->setDefaultAction(reloadAction);
+  ui->muteButton   ->setDefaultAction(muteAction);
+  ui->shuffleButton->setDefaultAction(shuffleAction);
   
   setWindowIcon(QIcon(":/img/music.png"));  
 }
@@ -100,39 +102,42 @@ QVPlayer::~QVPlayer()
 
 void QVPlayer::setupActions()
 {
-  quitAction = new QAction(tr("&Quit"), this);
-  muteAction = new QAction(tr("&Mute"), this);
+  quitAction     = new QAction(tr("&Quit"),  this);
+  muteAction     = new QAction(tr("&Mute"),  this);
   muteAction->setCheckable(true);
-  stopAction = new QAction(tr("&Stop"), this);
-  playAction = new QAction(tr("P&lay"), this);
-  pauseAction = new QAction(tr("P&ause"), this);
-  nextAction = new QAction(tr("&Next"), this);
-  preAction = new QAction(tr("&Pre"), this);
-  searchAction = new QAction(tr("&Search"), this);
-  reloadAction = new QAction(tr("Reload"), this);
+  stopAction     = new QAction(tr("&Stop"),  this);
+  playAction     = new QAction(tr("P&lay"),  this);
+  pauseAction    = new QAction(tr("P&ause"), this);
+  nextAction     = new QAction(tr("&Next"),  this);
+  preAction      = new QAction(tr("&Pre"),   this);
+  searchAction   = new QAction(tr("&Search"),this);
+  reloadAction   = new QAction(tr("Reload"), this);
   showHideAction = new QAction(tr("Show/&Hide"), this);
+  shuffleAction  = new QAction(tr("Shuffle"),this);
   
   //quitAction->setIcon(style()->standardIcon(QStyle::SP_));
-  muteAction->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
-  stopAction->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-  playAction->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-  pauseAction->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-  nextAction->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
-  preAction->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
+  muteAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+  stopAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+  playAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+  pauseAction   -> setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+  nextAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+  preAction     -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
   //searchAction->setIcon(style()->standardIcon(Q));
-  reloadAction->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
-  
-  quitAction->setToolTip(tr("Quit the application"));
-  muteAction->setToolTip(tr("Mute sound"));
-  stopAction->setToolTip(tr("Stop music"));
-  playAction->setToolTip(tr("Play music"));
-  pauseAction->setToolTip(tr("Pause music"));
-  nextAction->setToolTip(tr("Play next audio"));
-  preAction->setToolTip(tr("Play previous audio"));
-  searchAction->setToolTip(tr("Search audios"));
-  reloadAction->setToolTip(tr("Reload audio list"));
-  showHideAction->setToolTip(tr("Show/hide player"));
-  
+  reloadAction  ->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
+  shuffleAction ->setIcon(QIcon(":/img/shuffle.png"));
+
+
+  quitAction     -> setToolTip(tr("Quit the application"));
+  muteAction     -> setToolTip(tr("Mute sound"));
+  stopAction     -> setToolTip(tr("Stop music"));
+  playAction     -> setToolTip(tr("Play music"));
+  pauseAction    -> setToolTip(tr("Pause music"));
+  nextAction     -> setToolTip(tr("Play next audio"));
+  preAction      -> setToolTip(tr("Play previous audio"));
+  searchAction   -> setToolTip(tr("Search audios"));
+  reloadAction   -> setToolTip(tr("Reload audio list"));
+  showHideAction -> setToolTip(tr("Show/hide player"));
+  shuffleAction  -> setToolTip(tr("Shuffle playlist"));
   connect(quitAction, SIGNAL(triggered(bool)), 
           qApp, SLOT(quit()));
   connect(muteAction, SIGNAL(triggered(bool)),
@@ -155,6 +160,8 @@ void QVPlayer::setupActions()
           this, SLOT(audioReload()));
   connect(showHideAction, SIGNAL(triggered(bool)),
           this, SLOT(showHide()));
+  connect(shuffleAction, SIGNAL(triggered(bool)),
+          this, SLOT(listShuffle()));
 }
 
 void QVPlayer::setupTray()
@@ -175,7 +182,6 @@ void QVPlayer::setupTray()
   tray->contextMenu()->addSeparator();
   tray->contextMenu()->addAction(quitAction);
 }
-
 
 void QVPlayer::accepted(QString token)
 {
@@ -259,6 +265,20 @@ void QVPlayer::audioReload()
   getAudioRequest->exec();
   ui->listView->setEnabled(false);
   ui->status->setText(tr("My page"));
+}
+
+void QVPlayer::listShuffle()
+{
+  QVector<Phonon::MediaSource> sourcesVec = sources.toVector();
+  QVector<QString> stringVec  = stringmodel->stringList().toVector();
+  for(int i = 1; i < sourcesVec.count(); i++)
+  {
+    int r = qrand() % i;
+    std::swap(sourcesVec[r], sourcesVec[i]);
+    std::swap(stringVec [r], stringVec [i]);
+  }
+  sources = sourcesVec.toList();
+  stringmodel->setStringList(stringVec.toList());
 }
 
 void QVPlayer::searchClicked()
