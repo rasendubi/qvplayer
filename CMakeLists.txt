@@ -14,6 +14,8 @@ set(qvplayer_FORMS
 
 set(qvplayer_QRC
     qrc/main.qrc)
+    
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 set(QT_USE_QTWEBKIT TRUE)
 find_package(Qt4 REQUIRED)
