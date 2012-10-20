@@ -22,7 +22,7 @@ include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
 
 find_package(Qtvk REQUIRED)
-include_directories(${Qtvk_INCLUDES})
+include_directories(${Qtvk_INCLUDE_DIR})
 link_directories(${Qtvk_LIBRARY_DIR})
 
 qt4_wrap_cpp(qvplayer_MOC_SOURCES ${qvplayer_HEADERS})
