@@ -23,6 +23,7 @@ add_definitions(${QT_DEFINITIONS})
 
 find_package(Qtvk REQUIRED)
 include_directories(${Qtvk_INCLUDES})
+link_directories(${Qtvk_LIBRARY_DIR})
 
 qt4_wrap_cpp(qvplayer_MOC_SOURCES ${qvplayer_HEADERS})
 qt4_wrap_ui(qvplayer_UI_SOURCES ${qvplayer_FORMS})
