@@ -211,7 +211,7 @@ void QVPlayer::userClicked(const QModelIndex& index)
 void QVPlayer::audioPre()
 {
   if( --curSourceId < 0 )
-    curSourceId = sources.count();
+    curSourceId = sources.count()-1;
   
   ui->listView->setCurrentIndex(ui->listView->model()->index(curSourceId, 0));
   audioClicked(ui->listView->model()->index(curSourceId, 0));
