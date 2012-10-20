@@ -29,6 +29,10 @@ qt4_wrap_cpp(qvplayer_MOC_SOURCES ${qvplayer_HEADERS})
 qt4_wrap_ui(qvplayer_UI_SOURCES ${qvplayer_FORMS})
 qt4_add_resources(qvplayer_RESOURCES ${qvplayer_QRC})
 
+if(WIN32 AND NOT CYGWIN)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
+endif()
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(qvplayer ${qvplayer_SOURCES} ${qvplayer_MOC_SOURCES} ${qvplayer_UI_SOURCES}
