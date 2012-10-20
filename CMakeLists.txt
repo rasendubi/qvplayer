@@ -16,12 +16,10 @@ set(qvplayer_QRC
     qrc/main.qrc)
 
 set(QT_USE_QTWEBKIT TRUE)
+set(QT_USE_PHONON TRUE)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
-
-find_package(Phonon REQUIRED)
-include_directories(${PHONON_INCLUDES})
 
 find_package(Qtvk REQUIRED)
 include_directories(${Qtvk_INCLUDES})
