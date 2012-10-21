@@ -145,14 +145,15 @@ void QVPlayer::setupActions()
   );  
   
   //Setup icons
-  muteAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
-  stopAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-  playAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-  pauseAction   -> setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-  nextAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
-  preAction     -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
-  homeAction    -> setIcon(QIcon(":/img/home.png"));
-  shuffleAction -> setIcon(QIcon(":/img/shuffle.png"));
+  muteAction        -> setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+  stopAction        -> setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+  playAction        -> setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+  pauseAction       -> setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+  nextAction        -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+  preAction         -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
+  homeAction        -> setIcon(QIcon(":/img/home.png"));
+  shuffleAction     -> setIcon(QIcon(":/img/shuffle.png"));
+  repeatTrackAction -> setIcon(QIcon(":/img/repeat.png"));
 
   //Setup tooltips
   quitAction     -> setToolTip(tr("Quit the application"));
@@ -385,6 +386,7 @@ void QVPlayer::audioRequestFinished(QList<Vk::AudioFile> list)
   }
   ui->listView->setEnabled(true);
   stringmodel->setStringList(strs);
+
 }
 
 void QVPlayer::muteClicked(bool state)
