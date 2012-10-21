@@ -372,6 +372,8 @@ void QVPlayer::mediaStateChanged(Phonon::State state, Phonon::State oldstate )
     ui->playButton->removeAction(playAction);
     ui->playButton->setDefaultAction(pauseAction);
   }
+  else if( state == Phonon::ErrorState )
+    audioNext();
   else
   {
     ui->playButton->removeAction(pauseAction);
