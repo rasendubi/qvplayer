@@ -66,7 +66,7 @@ private:
           *nextAction,
           *preAction,
           *searchAction,
-          *reloadAction,
+          *homeAction,
           *showHideAction,
           *shuffleAction;
   
@@ -83,7 +83,7 @@ private slots:
   void userClicked(const QModelIndex& index);
   void audioPre();
   void audioNext();
-  void audioReload();
+  void audioHome();
   void listShuffle();
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
   void searchClicked();

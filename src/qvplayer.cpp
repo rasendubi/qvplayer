@@ -72,23 +72,18 @@ QVPlayer::QVPlayer(QWidget *parent) :
   connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
           this, SLOT(mediaStateChanged(Phonon::State,Phonon::State)));
   
-  //connect(ui->reloadButton, SIGNAL(clicked()), this, SLOT(audioReload()));
-  //connect(ui->playButton, SIGNAL(clicked(bool)), mediaObject, SLOT(play()));
   connect(mediaObject, SIGNAL(finished()), this, SLOT(audioNext()));
   
-  //connect(ui->searchButton, SIGNAL(clicked(bool)), this, SLOT(searchClicked()));
   connect(ui->searchEdit, SIGNAL(returnPressed()), this, SLOT(searchClicked()));
   
   setupActions();
   setupTray();
   
-  //ui->userView->hide();
-  
   ui->playButton   ->setDefaultAction(playAction);
   ui->preButton    ->setDefaultAction(preAction);
   ui->nextButton   ->setDefaultAction(nextAction);
   ui->searchButton ->setDefaultAction(searchAction);
-  ui->reloadButton ->setDefaultAction(reloadAction);
+  ui->homeButton   ->setDefaultAction(homeAction);
   ui->muteButton   ->setDefaultAction(muteAction);
   ui->shuffleButton->setDefaultAction(shuffleAction);
   
@@ -111,20 +106,18 @@ void QVPlayer::setupActions()
   nextAction     = new QAction(tr("&Next"),  this);
   preAction      = new QAction(tr("&Pre"),   this);
   searchAction   = new QAction(tr("&Search"),this);
-  reloadAction   = new QAction(tr("Reload"), this);
+  homeAction     = new QAction(tr("Home page"), this);
   showHideAction = new QAction(tr("Show/&Hide"), this);
   shuffleAction  = new QAction(tr("Shuffle"),this);
   
-  //quitAction->setIcon(style()->standardIcon(QStyle::SP_));
   muteAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
   stopAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaStop));
   playAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
   pauseAction   -> setIcon(style()->standardIcon(QStyle::SP_MediaPause));
   nextAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
   preAction     -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
-  //searchAction->setIcon(style()->standardIcon(Q));
-  reloadAction  ->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
-  shuffleAction ->setIcon(QIcon(":/img/shuffle.png"));
+  homeAction    -> setIcon(QIcon(":/img/home.png"));
+  shuffleAction -> setIcon(QIcon(":/img/shuffle.png"));
 
 
   quitAction     -> setToolTip(tr("Quit the application"));
@@ -135,7 +128,7 @@ void QVPlayer::setupActions()
   nextAction     -> setToolTip(tr("Play next audio"));
   preAction      -> setToolTip(tr("Play previous audio"));
   searchAction   -> setToolTip(tr("Search audios"));
-  reloadAction   -> setToolTip(tr("Reload audio list"));
+  homeAction     -> setToolTip(tr("Switch to home playlist"));
   showHideAction -> setToolTip(tr("Show/hide player"));
   shuffleAction  -> setToolTip(tr("Shuffle playlist"));
   connect(quitAction, SIGNAL(triggered(bool)), 
@@ -156,8 +149,8 @@ void QVPlayer::setupActions()
           this, SLOT(audioPre()));
   connect(searchAction, SIGNAL(triggered(bool)),
           this, SLOT(searchClicked()));
-  connect(reloadAction, SIGNAL(triggered(bool)),
-          this, SLOT(audioReload()));
+  connect(homeAction, SIGNAL(triggered(bool)),
+          this, SLOT(audioHome()));
   connect(showHideAction, SIGNAL(triggered(bool)),
           this, SLOT(showHide()));
   connect(shuffleAction, SIGNAL(triggered(bool)),
@@ -188,7 +181,7 @@ void QVPlayer::accepted(QString token)
   this->token = token;
   show();
   tray->show();
-  audioReload();
+  audioHome();
   getFriends();
 }
 
@@ -258,7 +251,7 @@ void QVPlayer::closeEvent(QCloseEvent* event)
   }
 }
 
-void QVPlayer::audioReload()
+void QVPlayer::audioHome()
 {
   Vk::Audio::Get *getAudioRequest = new Vk::Audio::Get(token);
   connect(getAudioRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
@@ -293,7 +286,7 @@ void QVPlayer::searchClicked()
     ui->status->setText(tr("Search: ") + ui->searchEdit->text());
   }
   else
-    audioReload();
+    audioHome();
 }
 
 void QVPlayer::getFriends()

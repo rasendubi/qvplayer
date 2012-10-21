@@ -198,7 +198,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="reloadButton">
+      <widget class="QToolButton" name="homeButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
          <horstretch>0</horstretch>
@@ -206,7 +206,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Reload</string>
+        <string>Home</string>
        </property>
        <property name="autoRaise">
         <bool>true</bool>
