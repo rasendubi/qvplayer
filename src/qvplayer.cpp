@@ -265,7 +265,10 @@ void QVPlayer::showHide()
   if( isVisible() )
     hide();
   else
+  {
+    setWindowState(Qt::WindowActive);
     show();
+  }
 }
 
 void QVPlayer::closeEvent(QCloseEvent* event)
