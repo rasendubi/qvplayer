@@ -50,8 +50,8 @@ private:
   Ui::QVPlayer *ui;
   QStringListModel *stringmodel;
   QStringListModel *userModel;
-  QList<Phonon::MediaSource> sources;
-  QList<int> userIds;
+  QVector<Phonon::MediaSource> sources;
+  QVector<int> userIds;
   QString token;
   Phonon::AudioOutput *audioOutput;
   Phonon::MediaObject *mediaObject;

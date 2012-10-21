@@ -320,15 +320,13 @@ void QVPlayer::audioHome()
 
 void QVPlayer::listShuffle()
 {
-  QVector<Phonon::MediaSource> sourcesVec = sources.toVector();
   QVector<QString> stringVec  = stringmodel->stringList().toVector();
-  for(int i = 1; i < sourcesVec.count(); i++)
+  for(int i = 1; i < sources.count(); i++)
   {
     int r = qrand() % i;
-    std::swap(sourcesVec[r], sourcesVec[i]);
+    std::swap(sources[r], sources[i]);
     std::swap(stringVec [r], stringVec [i]);
   }
-  sources = sourcesVec.toList();
   stringmodel->setStringList(stringVec.toList());
 }
 
@@ -377,6 +375,7 @@ void QVPlayer::userRequestFinished(QList<Vk::User> list)
 void QVPlayer::audioRequestFinished(QList<Vk::AudioFile> list)
 {
   sources.clear();
+  sources.reserve(list.size());
   QStringList strs;
   foreach( Vk::AudioFile file, list )
   {
