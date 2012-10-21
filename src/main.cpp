@@ -1,6 +1,6 @@
 /*
  *  QVPlayer. VKontakte player
- *  Copyright (C) 2012  Alexey Shmalko <dubi.rasen@gmail.com>
+ *  Copyright (C) 2012  Alexey Shmalko <dubi.rasen@gmail.com> and Sochka Oleksandr <sasha.sochka@gmail.com>
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
