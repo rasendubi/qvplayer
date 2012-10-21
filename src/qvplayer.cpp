@@ -276,7 +276,9 @@ void QVPlayer::closeEvent(QCloseEvent* event)
   if( isVisible() )
   {
     hide();
+#ifndef CLOSE_INSTEAD_OF_HIDE
     event->ignore();
+#endif
   }
 }
 

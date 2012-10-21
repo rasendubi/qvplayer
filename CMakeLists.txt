@@ -54,6 +54,11 @@ install(FILES qrc/img/qvplayer.png
         
 include(InstallRequiredSystemLibraries)
 
+if( CLOSE_INSTEAD_OF_HIDE )
+  add_definitions(-DCLOSE_INSTEAD_OF_HIDE)
+endif()
+
+
 set(CPACK_PACKAGE_NAME "qvplayer")
 set(CPACK_PACKAGE_VENDOR "Alexey Shmalko")
 set(CPACK_PACKAGE_VERSION ${qvplayer_VERSION})
