@@ -31,6 +31,7 @@
 #include <qtvk/audio/get.h>
 #include <qtvk/friends/get.h>
 #include <qtvk/vkauth.h>
+
 #include <utility>
 
 QVPlayer::QVPlayer(QWidget *parent) :
@@ -57,9 +58,9 @@ QVPlayer::QVPlayer(QWidget *parent) :
 #endif
   if( !QDir::home().exists(appdir) )
     QDir::home().mkdir(appdir);
-  QString str = QDir::homePath() + "/" + appdir + "/cookies.ck";
+  cookiesPath = QDir::homePath() + "/" + appdir + "/cookies.ck";
   
-  Vk::VkAuth *auth = new Vk::VkAuth(str, this);
+  Vk::VkAuth *auth = new Vk::VkAuth(cookiesPath, this);
   connect(auth, SIGNAL(authAccepted(QString)), this, SLOT(accepted(QString)));
   connect(auth, SIGNAL(authCanceled()), this, SLOT(close()));
   auth->auth("2921193", "audio,friends")->show();
@@ -109,7 +110,9 @@ void QVPlayer::setupActions()
   homeAction     = new QAction(tr("Home page"), this);
   showHideAction = new QAction(tr("Show/&Hide"), this);
   shuffleAction  = new QAction(tr("Shuffle"),this);
+  clearCookiesAction = new QAction(tr("Clear cookies"), this);
   
+  //Setup icons
   muteAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
   stopAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaStop));
   playAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
@@ -119,7 +122,7 @@ void QVPlayer::setupActions()
   homeAction    -> setIcon(QIcon(":/img/home.png"));
   shuffleAction -> setIcon(QIcon(":/img/shuffle.png"));
 
-
+  //Setup tooltips
   quitAction     -> setToolTip(tr("Quit the application"));
   muteAction     -> setToolTip(tr("Mute sound"));
   stopAction     -> setToolTip(tr("Stop music"));
@@ -131,6 +134,9 @@ void QVPlayer::setupActions()
   homeAction     -> setToolTip(tr("Switch to home playlist"));
   showHideAction -> setToolTip(tr("Show/hide player"));
   shuffleAction  -> setToolTip(tr("Shuffle playlist"));
+  clearCookiesAction->setToolTip(tr("Clear authorization cookies"));
+  
+  //Connect signals
   connect(quitAction, SIGNAL(triggered(bool)), 
           qApp, SLOT(quit()));
   connect(muteAction, SIGNAL(triggered(bool)),
@@ -155,6 +161,8 @@ void QVPlayer::setupActions()
           this, SLOT(showHide()));
   connect(shuffleAction, SIGNAL(triggered(bool)),
           this, SLOT(listShuffle()));
+  connect(clearCookiesAction, SIGNAL(triggered(bool)),
+          this, SLOT(clearCookies()));
 }
 
 void QVPlayer::setupTray()
@@ -164,6 +172,8 @@ void QVPlayer::setupTray()
           this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
   tray->setContextMenu(new QMenu(tr("Main menu")));
   tray->contextMenu()->addAction(showHideAction);
+  tray->contextMenu()->addSeparator();
+  tray->contextMenu()->addAction(clearCookiesAction);
   tray->contextMenu()->addSeparator();
   tray->contextMenu()->addAction(playAction);
   tray->contextMenu()->addAction(pauseAction);
@@ -272,6 +282,12 @@ void QVPlayer::listShuffle()
   }
   sources = sourcesVec.toList();
   stringmodel->setStringList(stringVec.toList());
+}
+
+void QVPlayer::clearCookies()
+{
+  if( QFile::remove(cookiesPath) )
+    clearCookiesAction->setEnabled(false);  
 }
 
 void QVPlayer::searchClicked()

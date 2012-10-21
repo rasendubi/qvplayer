@@ -57,6 +57,7 @@ private:
   Phonon::MediaObject *mediaObject;
   int curSourceId;
   QSystemTrayIcon *tray;
+  QString cookiesPath;
   
   QAction *quitAction,
           *muteAction,
@@ -68,7 +69,8 @@ private:
           *searchAction,
           *homeAction,
           *showHideAction,
-          *shuffleAction;
+          *shuffleAction,
+          *clearCookiesAction;
   
 private:
   virtual void closeEvent(QCloseEvent* );
@@ -85,6 +87,7 @@ private slots:
   void audioNext();
   void audioHome();
   void listShuffle();
+  void clearCookies();
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
   void searchClicked();
   void getFriends();
