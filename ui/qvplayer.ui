@@ -223,6 +223,19 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QToolButton" name="repeatButton">
+       <property name="text">
+        <string>Repeat</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

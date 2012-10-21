@@ -43,6 +43,8 @@ QVPlayer::QVPlayer(QWidget *parent) :
 {
   ui->setupUi(this);
   
+  repeatTrack = false;
+  
   stringmodel = new QStringListModel(this);
   ui->listView->setModel(stringmodel);
   connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(audioClicked(QModelIndex)));
@@ -73,7 +75,7 @@ QVPlayer::QVPlayer(QWidget *parent) :
   connect(mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
           this, SLOT(mediaStateChanged(Phonon::State,Phonon::State)));
   
-  connect(mediaObject, SIGNAL(finished()), this, SLOT(audioNext()));
+  connect(mediaObject, SIGNAL(finished()), this, SLOT(audioEnd()));
   
   connect(ui->searchEdit, SIGNAL(returnPressed()), this, SLOT(searchClicked()));
   
@@ -87,6 +89,7 @@ QVPlayer::QVPlayer(QWidget *parent) :
   ui->homeButton   ->setDefaultAction(homeAction);
   ui->muteButton   ->setDefaultAction(muteAction);
   ui->shuffleButton->setDefaultAction(shuffleAction);
+  ui->repeatButton ->setDefaultAction(repeatTrackAction);
   
   setWindowIcon(QIcon(":/img/music.png"));  
 }
@@ -111,6 +114,8 @@ void QVPlayer::setupActions()
   showHideAction = new QAction(tr("Show/&Hide"), this);
   shuffleAction  = new QAction(tr("Shuffle"),this);
   clearCookiesAction = new QAction(tr("Clear cookies"), this);
+  repeatTrackAction  = new QAction(tr("Repeat"), this);
+  repeatTrackAction->setCheckable(true);
   
   //Setup icons
   muteAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
@@ -135,6 +140,7 @@ void QVPlayer::setupActions()
   showHideAction -> setToolTip(tr("Show/hide player"));
   shuffleAction  -> setToolTip(tr("Shuffle playlist"));
   clearCookiesAction->setToolTip(tr("Clear authorization cookies"));
+  repeatTrackAction ->setToolTip(tr("Repeat current track"));
   
   //Connect signals
   connect(quitAction, SIGNAL(triggered(bool)), 
@@ -163,6 +169,8 @@ void QVPlayer::setupActions()
           this, SLOT(listShuffle()));
   connect(clearCookiesAction, SIGNAL(triggered(bool)),
           this, SLOT(clearCookies()));
+  connect(repeatTrackAction, SIGNAL(triggered(bool)),
+          this, SLOT(repeatTrackClicked(bool)));
 }
 
 void QVPlayer::setupTray()
@@ -228,6 +236,14 @@ void QVPlayer::audioNext()
   ui->listView->setCurrentIndex(ui->listView->model()->index(curSourceId, 0));
   audioClicked(ui->listView->model()->index(curSourceId, 0));
   
+}
+
+void QVPlayer::audioEnd()
+{
+  if( repeatTrack )
+    mediaObject->play();
+  else
+    audioNext();
 }
 
 void QVPlayer::trayActivated(QSystemTrayIcon::ActivationReason reason)
@@ -360,4 +376,7 @@ void QVPlayer::mediaStateChanged(Phonon::State state, Phonon::State oldstate )
   }
 }
 
-
+void QVPlayer::repeatTrackClicked(bool state)
+{
+  repeatTrack = state;
+}

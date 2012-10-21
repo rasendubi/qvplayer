@@ -58,6 +58,7 @@ private:
   int curSourceId;
   QSystemTrayIcon *tray;
   QString cookiesPath;
+  bool repeatTrack;
   
   QAction *quitAction,
           *muteAction,
@@ -70,7 +71,8 @@ private:
           *homeAction,
           *showHideAction,
           *shuffleAction,
-          *clearCookiesAction;
+          *clearCookiesAction,
+          *repeatTrackAction;
   
 private:
   virtual void closeEvent(QCloseEvent* );
@@ -85,6 +87,7 @@ private slots:
   void userClicked(const QModelIndex& index);
   void audioPre();
   void audioNext();
+  void audioEnd();
   void audioHome();
   void listShuffle();
   void clearCookies();
@@ -94,6 +97,7 @@ private slots:
   void muteClicked(bool state);
   void mediaStateChanged(Phonon::State state,Phonon::State oldstate);
   void showHide();
+  void repeatTrackClicked(bool state);
 };
 
 #endif // QVPLAYER_H
