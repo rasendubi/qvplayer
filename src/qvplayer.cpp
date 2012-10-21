@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QCloseEvent>
 #include <QMenu>
+#include <QShortcut>
 #include <QtWebKit/QWebView>
 
 #include <phonon/AudioOutput>
@@ -116,6 +117,32 @@ void QVPlayer::setupActions()
   clearCookiesAction = new QAction(tr("Clear cookies"), this);
   repeatTrackAction  = new QAction(tr("Repeat"), this);
   repeatTrackAction->setCheckable(true);
+
+  //Setup shortcuts
+  muteAction->setShortcuts(QList<QKeySequence>() 
+    << QKeySequence("Ctrl+m") 
+    << QKeySequence("m")
+  );
+  nextAction->setShortcuts(QList<QKeySequence>()
+    << QKeySequence(Qt::CTRL + Qt::Key_Right)
+    << QKeySequence(Qt::Key_Right)
+  );
+  preAction->setShortcuts(QList<QKeySequence>()
+    << QKeySequence(Qt::CTRL + Qt::Key_Left)
+    << QKeySequence(Qt::Key_Left)
+  );
+  homeAction->setShortcuts(QList<QKeySequence>()
+    << QKeySequence("Ctrl+h")
+    << QKeySequence("h")
+  );
+  shuffleAction->setShortcuts(QList<QKeySequence>()
+    << QKeySequence("Ctrl+s")
+    << QKeySequence("s")
+  );
+  repeatTrackAction->setShortcuts(QList<QKeySequence>()
+    << QKeySequence("Ctrl+r")
+    << QKeySequence("r")
+  );  
   
   //Setup icons
   muteAction    -> setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
