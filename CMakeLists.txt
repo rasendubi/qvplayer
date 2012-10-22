@@ -46,6 +46,10 @@ if(WIN32 AND NOT CYGWIN)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
 endif()
 
+if( CLOSE_INSTEAD_OF_HIDE )
+  add_definitions(-DCLOSE_INSTEAD_OF_HIDE)
+endif()
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(qvplayer ${qvplayer_SOURCES} ${qvplayer_MOC_SOURCES} ${qvplayer_UI_SOURCES}
@@ -60,11 +64,6 @@ install(FILES qrc/img/qvplayer.png
         DESTINATION share/pixmaps)
         
 include(InstallRequiredSystemLibraries)
-
-if( CLOSE_INSTEAD_OF_HIDE )
-  add_definitions(-DCLOSE_INSTEAD_OF_HIDE)
-endif()
-
 
 set(CPACK_PACKAGE_NAME "qvplayer")
 set(CPACK_PACKAGE_VENDOR "Alexey Shmalko")
