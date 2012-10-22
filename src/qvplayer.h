@@ -63,8 +63,7 @@ private:
   QAction *quitAction,
           *muteAction,
           *stopAction,
-          *playAction,
-          *pauseAction,
+          *toggleAction,
           *nextAction,
           *preAction,
           *searchAction,
@@ -85,6 +84,7 @@ private slots:
   void userRequestFinished(QList<Vk::User> list);
   void audioClicked(const QModelIndex& index);
   void userClicked(const QModelIndex& index);
+  void audioToggle();
   void audioPre();
   void audioNext();
   void audioEnd();

@@ -83,7 +83,7 @@ QVPlayer::QVPlayer(QWidget *parent) :
   setupActions();
   setupTray();
   
-  ui->playButton   ->setDefaultAction(playAction);
+  ui->playButton   ->setDefaultAction(toggleAction);
   ui->preButton    ->setDefaultAction(preAction);
   ui->nextButton   ->setDefaultAction(nextAction);
   ui->searchButton ->setDefaultAction(searchAction);
@@ -106,8 +106,7 @@ void QVPlayer::setupActions()
   muteAction     = new QAction(tr("&Mute"),  this);
   muteAction->setCheckable(true);
   stopAction     = new QAction(tr("&Stop"),  this);
-  playAction     = new QAction(tr("P&lay"),  this);
-  pauseAction    = new QAction(tr("P&ause"), this);
+  toggleAction   = new QAction(tr("P&lay"),  this);
   nextAction     = new QAction(tr("&Next"),  this);
   preAction      = new QAction(tr("&Pre"),   this);
   searchAction   = new QAction(tr("&Search"),this);
@@ -122,6 +121,10 @@ void QVPlayer::setupActions()
   muteAction->setShortcuts(QList<QKeySequence>() 
     << QKeySequence("Ctrl+m") 
     << QKeySequence("m")
+  );
+  toggleAction->setShortcuts(QList<QKeySequence>()
+    << QKeySequence(Qt::CTRL + Qt::Key_Space)
+    << QKeySequence(Qt::Key_Space)
   );
   nextAction->setShortcuts(QList<QKeySequence>()
     << QKeySequence(Qt::CTRL + Qt::Key_Right)
@@ -147,8 +150,7 @@ void QVPlayer::setupActions()
   //Setup icons
   muteAction        -> setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
   stopAction        -> setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-  playAction        -> setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-  pauseAction       -> setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+  toggleAction      -> setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
   nextAction        -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
   preAction         -> setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
   homeAction        -> setIcon(QIcon(":/img/home.png"));
@@ -159,8 +161,7 @@ void QVPlayer::setupActions()
   quitAction     -> setToolTip(tr("Quit the application"));
   muteAction     -> setToolTip(tr("Mute sound"));
   stopAction     -> setToolTip(tr("Stop music"));
-  playAction     -> setToolTip(tr("Play music"));
-  pauseAction    -> setToolTip(tr("Pause music"));
+  toggleAction   -> setToolTip(tr("Play track"));
   nextAction     -> setToolTip(tr("Play next audio"));
   preAction      -> setToolTip(tr("Play previous audio"));
   searchAction   -> setToolTip(tr("Search audios"));
@@ -179,10 +180,8 @@ void QVPlayer::setupActions()
           this, SLOT(muteClicked(bool)));
   connect(stopAction, SIGNAL(triggered(bool)),
           mediaObject, SLOT(stop()));
-  connect(playAction, SIGNAL(triggered(bool)),
-          mediaObject, SLOT(play()));
-  connect(pauseAction, SIGNAL(triggered(bool)),
-          mediaObject, SLOT(pause()));
+  connect(toggleAction, SIGNAL(triggered(bool)),
+          this, SLOT(audioToggle()));
   connect(nextAction, SIGNAL(triggered(bool)),
           this, SLOT(audioNext()));
   connect(preAction, SIGNAL(triggered(bool)),
@@ -211,8 +210,7 @@ void QVPlayer::setupTray()
   tray->contextMenu()->addSeparator();
   tray->contextMenu()->addAction(clearCookiesAction);
   tray->contextMenu()->addSeparator();
-  tray->contextMenu()->addAction(playAction);
-  tray->contextMenu()->addAction(pauseAction);
+  tray->contextMenu()->addAction(toggleAction);
   tray->contextMenu()->addAction(stopAction);
   tray->contextMenu()->addSeparator();
   tray->contextMenu()->addAction(preAction);
@@ -245,6 +243,14 @@ void QVPlayer::userClicked(const QModelIndex& index)
   getAudioRequest->exec();
   ui->listView->setEnabled(false);
   ui->status->setText(tr("Friend: ") + userModel->stringList().value(index.row()));
+}
+
+void QVPlayer::audioToggle()
+{
+  if( mediaObject->state() == Phonon::PlayingState )
+    mediaObject->pause();
+  else
+    mediaObject->play();
 }
 
 void QVPlayer::audioPre()
@@ -399,15 +405,17 @@ void QVPlayer::mediaStateChanged(Phonon::State state, Phonon::State oldstate )
 {
   if( state == Phonon::PlayingState )
   {
-    ui->playButton->removeAction(playAction);
-    ui->playButton->setDefaultAction(pauseAction);
+    toggleAction->setText(tr("&Pause"));
+    toggleAction->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+    toggleAction->setToolTip(tr("Pause track"));
   }
   else if( state == Phonon::ErrorState )
     audioNext();
   else
   {
-    ui->playButton->removeAction(pauseAction);
-    ui->playButton->setDefaultAction(playAction);
+    toggleAction->setText(tr("&Play"));
+    toggleAction->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    toggleAction->setToolTip(tr("Play track"));
   }
 }
 
