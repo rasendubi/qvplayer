@@ -252,7 +252,7 @@ void QVPlayer::audioToggle()
 
   if( mediaObject->state() == Phonon::PlayingState )
     mediaObject->pause();
-  else if( mediaObject->state() == Phonon::LoadingState )
+  else if( mediaObject->state() == Phonon::LoadingState || mediaObject->state() == Phonon::StoppedState)
   {
     QModelIndex index = ui->listView->selectionModel()->currentIndex();
     curSourceId = (index.isValid() ? index.row() : 0);
