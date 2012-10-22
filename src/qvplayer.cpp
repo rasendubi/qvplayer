@@ -247,6 +247,9 @@ void QVPlayer::userClicked(const QModelIndex& index)
 
 void QVPlayer::audioToggle()
 {
+  if(sources.isEmpty())
+    return;
+
   if( mediaObject->state() == Phonon::PlayingState )
     mediaObject->pause();
   else if( mediaObject->state() == Phonon::LoadingState )
@@ -262,6 +265,9 @@ void QVPlayer::audioToggle()
 
 void QVPlayer::audioPre()
 {
+  if(sources.isEmpty())
+    return;
+
   if( --curSourceId < 0 )
     curSourceId = sources.count()-1;
   
@@ -271,6 +277,9 @@ void QVPlayer::audioPre()
 
 void QVPlayer::audioNext()
 {
+  if(sources.isEmpty())
+    return;
+
   if( ++curSourceId >= sources.count() )
     curSourceId = 0;
   
