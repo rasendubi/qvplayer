@@ -333,8 +333,11 @@ void QVPlayer::listShuffle()
     int r = qrand() % (i+1);
     std::swap(sources[r], sources[i]);
     std::swap(stringVec [r], stringVec [i]);
+    if(curSourceId == r || curSourceId == i)
+      curSourceId = curSourceId == r ? i : r;
   }
   stringmodel->setStringList(stringVec.toList());
+  ui->listView->setCurrentIndex(ui->listView->model()->index(curSourceId, 0));
 }
 
 void QVPlayer::clearCookies()
