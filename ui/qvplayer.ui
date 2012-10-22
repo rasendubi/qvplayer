@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
+    <width>530</width>
     <height>299</height>
    </rect>
   </property>
@@ -166,9 +166,6 @@
        <property name="iconVisible">
         <bool>false</bool>
        </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
        <property name="iconSize">
         <size>
          <width>16</width>
@@ -201,7 +198,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="reloadButton">
+      <widget class="QToolButton" name="homeButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
          <horstretch>0</horstretch>
@@ -209,7 +206,30 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Reload</string>
+        <string>Home</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="shuffleButton">
+       <property name="text">
+        <string>Shuffle</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="repeatButton">
+       <property name="text">
+        <string>Repeat</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
        <property name="autoRaise">
         <bool>true</bool>

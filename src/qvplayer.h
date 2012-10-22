@@ -1,6 +1,6 @@
 /*
  *  QVPlayer. VKontakte player
- *  Copyright (C) 2012  Alexey Shmalko <dubi.rasen@gmail.com>
+ *  Copyright (C) 2012  Alexey Shmalko <dubi.rasen@gmail.com> and Sochka Oleksandr <sasha.sochka@gmail.com>
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,24 +50,28 @@ private:
   Ui::QVPlayer *ui;
   QStringListModel *stringmodel;
   QStringListModel *userModel;
-  QList<Phonon::MediaSource> sources;
-  QList<int> userIds;
+  QVector<Phonon::MediaSource> sources;
+  QVector<int> userIds;
   QString token;
   Phonon::AudioOutput *audioOutput;
   Phonon::MediaObject *mediaObject;
   int curSourceId;
   QSystemTrayIcon *tray;
+  QString cookiesPath;
+  bool repeatTrack;
   
   QAction *quitAction,
           *muteAction,
           *stopAction,
-          *playAction,
-          *pauseAction,
+          *toggleAction,
           *nextAction,
           *preAction,
           *searchAction,
-          *reloadAction,
-          *showHideAction;
+          *homeAction,
+          *showHideAction,
+          *shuffleAction,
+          *clearCookiesAction,
+          *repeatTrackAction;
   
 private:
   virtual void closeEvent(QCloseEvent* );
@@ -80,15 +84,20 @@ private slots:
   void userRequestFinished(QList<Vk::User> list);
   void audioClicked(const QModelIndex& index);
   void userClicked(const QModelIndex& index);
+  void audioToggle();
   void audioPre();
   void audioNext();
-  void audioReload();
+  void audioEnd();
+  void audioHome();
+  void listShuffle();
+  void clearCookies();
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
   void searchClicked();
   void getFriends();
   void muteClicked(bool state);
   void mediaStateChanged(Phonon::State state,Phonon::State oldstate);
   void showHide();
+  void repeatTrackClicked(bool state);
 };
 
 #endif // QVPLAYER_H
