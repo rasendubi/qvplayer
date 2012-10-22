@@ -330,7 +330,7 @@ void QVPlayer::listShuffle()
   QVector<QString> stringVec  = stringmodel->stringList().toVector();
   for(int i = 1; i < sources.count(); i++)
   {
-    int r = qrand() % i;
+    int r = qrand() % (i+1);
     std::swap(sources[r], sources[i]);
     std::swap(stringVec [r], stringVec [i]);
   }
