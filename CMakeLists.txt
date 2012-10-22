@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 project(qvplayer)
 
 set(qvplayer_MAJOR_VERSION 0)
-set(qvplayer_MINOR_VERSION 1)
-set(qvplayer_PATCH_VERSION 4)
+set(qvplayer_MINOR_VERSION 2)
+set(qvplayer_PATCH_VERSION 0)
 set(qvplayer_VERSION
   "${qvplayer_MAJOR_VERSION}.${qvplayer_MINOR_VERSION}.${qvplayer_PATCH_VERSION}")
 
