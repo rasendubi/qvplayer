@@ -247,13 +247,12 @@ void QVPlayer::userClicked(const QModelIndex& index)
 
 void QVPlayer::audioToggle()
 {
-  if(sources.isEmpty())
-    return;
-
   if( mediaObject->state() == Phonon::PlayingState )
     mediaObject->pause();
   else if( mediaObject->state() == Phonon::LoadingState || mediaObject->state() == Phonon::StoppedState)
   {
+    if( sources.isEmpty() )
+      return;
     QModelIndex index = ui->listView->selectionModel()->currentIndex();
     curSourceId = (index.isValid() ? index.row() : 0);
     ui->listView->setCurrentIndex(ui->listView->model()->index(curSourceId, 0));
