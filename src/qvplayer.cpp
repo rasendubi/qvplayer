@@ -46,9 +46,9 @@ QVPlayer::QVPlayer(QWidget *parent) :
   
   repeatTrack = false;
   
-  stringmodel = new QStringListModel(this);
-  ui->listView->setModel(stringmodel);
-  connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(audioClicked(QModelIndex)));
+  audioModel = new AudioTableModel(this);
+  ui->tableView->setModel(audioModel);
+  connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(audioClicked(QModelIndex)));
   
   userModel = new QStringListModel(this);
   ui->userView->setModel(userModel);
@@ -241,7 +241,7 @@ void QVPlayer::userClicked(const QModelIndex& index)
   Vk::Audio::Get *getAudioRequest = new Vk::Audio::Get(token, userIds[index.row()]);
   connect(getAudioRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
   getAudioRequest->exec();
-  ui->listView->setEnabled(false);
+  ui->tableView->setEnabled(false);
   ui->status->setText(tr("Friend: ") + userModel->stringList().value(index.row()));
 }
 
@@ -253,10 +253,10 @@ void QVPlayer::audioToggle()
   {
     if( sources.isEmpty() )
       return;
-    QModelIndex index = ui->listView->selectionModel()->currentIndex();
+    QModelIndex index = ui->tableView->selectionModel()->currentIndex();
     curSourceId = (index.isValid() ? index.row() : 0);
-    ui->listView->setCurrentIndex(ui->listView->model()->index(curSourceId, 0));
-    audioClicked(ui->listView->model()->index(curSourceId, 0));
+    ui->tableView->setCurrentIndex(ui->tableView->model()->index(curSourceId, 0));
+    audioClicked(ui->tableView->model()->index(curSourceId, 0));
   }
   else
     mediaObject->play();
@@ -270,8 +270,8 @@ void QVPlayer::audioPre()
   if( --curSourceId < 0 )
     curSourceId = sources.count()-1;
   
-  ui->listView->setCurrentIndex(ui->listView->model()->index(curSourceId, 0));
-  audioClicked(ui->listView->model()->index(curSourceId, 0));
+  ui->tableView->setCurrentIndex(ui->tableView->model()->index(curSourceId, 0));
+  audioClicked(ui->tableView->model()->index(curSourceId, 0));
 }
 
 void QVPlayer::audioNext()
@@ -282,8 +282,8 @@ void QVPlayer::audioNext()
   if( ++curSourceId >= sources.count() )
     curSourceId = 0;
   
-  ui->listView->setCurrentIndex(ui->listView->model()->index(curSourceId, 0));
-  audioClicked(ui->listView->model()->index(curSourceId, 0));
+  ui->tableView->setCurrentIndex(ui->tableView->model()->index(curSourceId, 0));
+  audioClicked(ui->tableView->model()->index(curSourceId, 0));
   
 }
 
@@ -336,23 +336,23 @@ void QVPlayer::audioHome()
   Vk::Audio::Get *getAudioRequest = new Vk::Audio::Get(token);
   connect(getAudioRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
   getAudioRequest->exec();
-  ui->listView->setEnabled(false);
+  ui->tableView->setEnabled(false);
   ui->status->setText(tr("My page"));
 }
 
 void QVPlayer::listShuffle()
 {
-  QVector<QString> stringVec  = stringmodel->stringList().toVector();
+  QVector<Vk::AudioFile> audioVec  = audioModel->getAudioList();
   for(int i = 1; i < sources.count(); i++)
   {
     int r = qrand() % (i+1);
     std::swap(sources[r], sources[i]);
-    std::swap(stringVec [r], stringVec [i]);
+    std::swap(audioVec [r], audioVec [i]);
     if(curSourceId == r || curSourceId == i)
       curSourceId = curSourceId == r ? i : r;
   }
-  stringmodel->setStringList(stringVec.toList());
-  ui->listView->setCurrentIndex(ui->listView->model()->index(curSourceId, 0));
+  audioModel->setAudioList(audioVec);
+  ui->tableView->setCurrentIndex(ui->tableView->model()->index(curSourceId, 0));
 }
 
 void QVPlayer::clearCookies()
@@ -369,7 +369,7 @@ void QVPlayer::searchClicked()
     connect(searchRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
     //connect(searchRequest, SIGNAL(finished(QList<Vk::AudioFile>)), searchRequest, SLOT(deleteLater()));
     searchRequest->exec();
-    ui->listView->setEnabled(false);
+    ui->tableView->setEnabled(false);
     ui->status->setText(tr("Search: ") + ui->searchEdit->text());
   }
   else
@@ -403,14 +403,9 @@ void QVPlayer::audioRequestFinished(QList<Vk::AudioFile> list)
   sources.reserve(list.size());
   QStringList strs;
   foreach( Vk::AudioFile file, list )
-  {
     sources.append(Phonon::MediaSource(file.url));
-    strs.append(file.artist + " - " + file.title + " (" + QString::number(file.duration/60) 
-                + ":" + QString::number(file.duration%60+100).right(2) +")");
-  }
-  ui->listView->setEnabled(true);
-  stringmodel->setStringList(strs);
-
+  ui->tableView->setEnabled(true);
+  audioModel->setAudioList(list.toVector());
 }
 
 void QVPlayer::muteClicked(bool state)

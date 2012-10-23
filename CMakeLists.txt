@@ -10,9 +10,11 @@ set(qvplayer_VERSION
 
 set(qvplayer_SOURCES
     src/main.cpp
+    src/audiotablemodel.cpp
     src/qvplayer.cpp)
 
 set(qvplayer_HEADERS
+    src/audiotablemodel.h
     src/qvplayer.h)
 
 set(qvplayer_FORMS

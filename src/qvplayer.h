@@ -19,6 +19,8 @@
 #ifndef QVPLAYER_H
 #define QVPLAYER_H
 
+#include "audiotablemodel.h"
+
 #include <QList>
 #include <QStringList>
 #include <QStringListModel>
@@ -48,7 +50,7 @@ public:
   
 private:
   Ui::QVPlayer *ui;
-  QStringListModel *stringmodel;
+  AudioTableModel *audioModel;
   QStringListModel *userModel;
   QVector<Phonon::MediaSource> sources;
   QVector<int> userIds;

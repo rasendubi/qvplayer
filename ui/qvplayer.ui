@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
+    <width>552</width>
     <height>299</height>
    </rect>
   </property>
@@ -67,7 +67,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QListView" name="listView">
+     <widget class="QTableView" name="tableView">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
         <horstretch>1</horstretch>
@@ -83,7 +83,7 @@
       <property name="alternatingRowColors">
        <bool>false</bool>
       </property>
-      <property name="selectionRectVisible">
+      <property name="selectionRectVisible" stdset="0">
        <bool>true</bool>
       </property>
      </widget>
