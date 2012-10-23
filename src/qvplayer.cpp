@@ -180,6 +180,8 @@ void QVPlayer::setupActions()
           this, SLOT(muteClicked(bool)));
   connect(stopAction, SIGNAL(triggered(bool)),
           mediaObject, SLOT(stop()));
+  connect(stopAction, SIGNAL(triggered(bool)),
+          this, SLOT(updateWindowTitle(bool)));
   connect(toggleAction, SIGNAL(triggered(bool)),
           this, SLOT(audioToggle()));
   connect(nextAction, SIGNAL(triggered(bool)),
@@ -234,6 +236,7 @@ void QVPlayer::audioClicked(const QModelIndex& index)
   curSourceId = index.row();
   mediaObject->setCurrentSource(sources.at(curSourceId));
   mediaObject->play();
+  updateWindowTitle();
 }
 
 void QVPlayer::userClicked(const QModelIndex& index)
@@ -259,7 +262,10 @@ void QVPlayer::audioToggle()
     audioClicked(ui->listView->model()->index(curSourceId, 0));
   }
   else
+  {
     mediaObject->play();
+    updateWindowTitle();
+  }
 }
 
 void QVPlayer::audioPre()
@@ -441,4 +447,12 @@ void QVPlayer::mediaStateChanged(Phonon::State state, Phonon::State oldstate )
 void QVPlayer::repeatTrackClicked(bool state)
 {
   repeatTrack = state;
+}
+
+void QVPlayer::updateWindowTitle(bool music_title)
+{
+  if(!music_title)
+    setWindowTitle(tr("QVPlayer"));
+  else
+    setWindowTitle( stringmodel->stringList().at(curSourceId) + tr(" - QVPlayer"));
 }
