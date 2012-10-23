@@ -180,6 +180,8 @@ void QVPlayer::setupActions()
           this, SLOT(muteClicked(bool)));
   connect(stopAction, SIGNAL(triggered(bool)),
           mediaObject, SLOT(stop()));
+  connect(stopAction, SIGNAL(triggered(bool)),
+          this, SLOT(updateWindowTitle(bool)));
   connect(toggleAction, SIGNAL(triggered(bool)),
           this, SLOT(audioToggle()));
   connect(nextAction, SIGNAL(triggered(bool)),
@@ -234,6 +236,7 @@ void QVPlayer::audioClicked(const QModelIndex& index)
   curSourceId = index.row();
   mediaObject->setCurrentSource(sources.at(curSourceId));
   mediaObject->play();
+  updateWindowTitle();
 }
 
 void QVPlayer::userClicked(const QModelIndex& index)
@@ -253,13 +256,17 @@ void QVPlayer::audioToggle()
   {
     if( sources.isEmpty() )
       return;
+    
     QModelIndex index = ui->tableView->selectionModel()->currentIndex();
     curSourceId = (index.isValid() ? index.row() : 0);
     ui->tableView->setCurrentIndex(ui->tableView->model()->index(curSourceId, 0));
     audioClicked(ui->tableView->model()->index(curSourceId, 0));
   }
   else
+  {
     mediaObject->play();
+    updateWindowTitle();
+  }
 }
 
 void QVPlayer::audioPre()
@@ -348,8 +355,9 @@ void QVPlayer::listShuffle()
     int r = qrand() % (i+1);
     std::swap(sources[r], sources[i]);
     std::swap(audioVec [r], audioVec [i]);
-    if(curSourceId == r || curSourceId == i)
-      curSourceId = curSourceId == r ? i : r;
+    if(mediaObject->state() != Phonon::LoadingState &&  mediaObject->state() != Phonon::StoppedState)
+      if(curSourceId == r || curSourceId == i)
+        curSourceId = curSourceId == r ? i : r;
   }
   audioModel->setAudioList(audioVec);
   ui->tableView->setCurrentIndex(ui->tableView->model()->index(curSourceId, 0));
@@ -435,4 +443,15 @@ void QVPlayer::mediaStateChanged(Phonon::State state, Phonon::State oldstate )
 void QVPlayer::repeatTrackClicked(bool state)
 {
   repeatTrack = state;
+}
+
+void QVPlayer::updateWindowTitle(bool music_title)
+{
+  if(!music_title)
+    setWindowTitle(tr("QVPlayer"));
+  else
+  {
+    Vk::AudioFile track = audioModel->getAudioList().at(curSourceId);
+    setWindowTitle(track.artist + " - " + track.title + tr(" - QVPlayer"));
+  }
 }

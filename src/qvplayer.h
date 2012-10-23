@@ -100,6 +100,7 @@ private slots:
   void mediaStateChanged(Phonon::State state,Phonon::State oldstate);
   void showHide();
   void repeatTrackClicked(bool state);
+  void updateWindowTitle(bool music_title = true);
 };
 
 #endif // QVPLAYER_H
