@@ -66,7 +66,8 @@ QVPlayer::QVPlayer(QWidget *parent) :
   Vk::VkAuth *auth = new Vk::VkAuth(cookiesPath, this);
   connect(auth, SIGNAL(authAccepted(QString)), this, SLOT(accepted(QString)));
   connect(auth, SIGNAL(authCanceled()), this, SLOT(close()));
-  auth->auth("2921193", "audio,friends")->show();
+  QWebView *webView = auth->auth("2921193", "audio,friends");
+  connect(webView, SIGNAL(loadFinished(bool)), webView, SLOT(show()));
   
   mediaObject->setTickInterval(1000);
   Phonon::createPath(mediaObject, audioOutput);
