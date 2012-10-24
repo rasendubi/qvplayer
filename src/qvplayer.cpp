@@ -190,6 +190,8 @@ void QVPlayer::setupActions()
           this, SLOT(audioPre()));
   connect(searchAction, SIGNAL(triggered(bool)),
           this, SLOT(searchClicked()));
+  connect(ui->searchEdit, SIGNAL(textEdited(QString)),
+          this, SLOT(searchClicked()));
   connect(homeAction, SIGNAL(triggered(bool)),
           this, SLOT(audioHome()));
   connect(showHideAction, SIGNAL(triggered(bool)),
