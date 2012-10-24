@@ -20,16 +20,13 @@
 #include "ui_qvplayer.h"
 
 #include <QApplication>
-#include <QDir>
 #include <QCloseEvent>
+#include <QDir>
 #include <QMenu>
-#include <QShortcut>
 #include <QtWebKit/QWebView>
 
 #include <phonon/AudioOutput>
 
-#include <qtvk/audio/search.h>
-#include <qtvk/audio/get.h>
 #include <qtvk/friends/get.h>
 #include <qtvk/vkauth.h>
 
@@ -40,7 +37,8 @@ QVPlayer::QVPlayer(QWidget *parent) :
   ui(new Ui::QVPlayer),
   curSourceId(0),
   audioOutput(new Phonon::AudioOutput(Phonon::MusicCategory, this)),
-  mediaObject(new Phonon::MediaObject(this))
+  mediaObject(new Phonon::MediaObject(this)),
+  getAudioRequest(NULL)
 {
   ui->setupUi(this);
   
@@ -243,7 +241,12 @@ void QVPlayer::audioClicked(const QModelIndex& index)
 
 void QVPlayer::userClicked(const QModelIndex& index)
 {
-  Vk::Audio::Get *getAudioRequest = new Vk::Audio::Get(token, userIds[index.row()]);
+  if(getAudioRequest != NULL)
+  {
+    getAudioRequest->disconnect();
+    getAudioRequest->deleteLater();
+  }
+  getAudioRequest = new Vk::Audio::Get(token, userIds[index.row()]);
   connect(getAudioRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
   getAudioRequest->exec();
   ui->tableView->setEnabled(false);
@@ -342,7 +345,12 @@ void QVPlayer::closeEvent(QCloseEvent* event)
 
 void QVPlayer::audioHome()
 {
-  Vk::Audio::Get *getAudioRequest = new Vk::Audio::Get(token);
+  if(getAudioRequest != NULL)
+  {
+    getAudioRequest->disconnect();
+    getAudioRequest->deleteLater();
+  }
+  getAudioRequest = new Vk::Audio::Get(token);
   connect(getAudioRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
   getAudioRequest->exec();
   ui->tableView->setEnabled(false);

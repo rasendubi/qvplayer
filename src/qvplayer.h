@@ -34,6 +34,8 @@
 
 #include <qtvk/audiofile.h>
 #include <qtvk/user.h>
+#include <qtvk/audio/search.h>
+#include <qtvk/audio/get.h>
 
 class QAction;
 namespace Ui {
@@ -74,6 +76,7 @@ private:
           *shuffleAction,
           *clearCookiesAction,
           *repeatTrackAction;
+  Vk::AudioRequest *getAudioRequest;
   
 private:
   virtual void closeEvent(QCloseEvent* );
