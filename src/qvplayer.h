@@ -33,9 +33,8 @@
 #include <phonon/Path>
 
 #include <qtvk/audiofile.h>
+#include <qtvk/audiorequest.h>
 #include <qtvk/user.h>
-#include <qtvk/audio/search.h>
-#include <qtvk/audio/get.h>
 
 class QAction;
 namespace Ui {

@@ -27,6 +27,8 @@
 
 #include <phonon/AudioOutput>
 
+#include <qtvk/audio/search.h>
+#include <qtvk/audio/get.h>
 #include <qtvk/friends/get.h>
 #include <qtvk/vkauth.h>
 
@@ -241,11 +243,6 @@ void QVPlayer::audioClicked(const QModelIndex& index)
 
 void QVPlayer::userClicked(const QModelIndex& index)
 {
-  if(getAudioRequest != NULL)
-  {
-    getAudioRequest->disconnect();
-    getAudioRequest->deleteLater();
-  }
   getAudioRequest = new Vk::Audio::Get(token, userIds[index.row()]);
   connect(getAudioRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
   getAudioRequest->exec();
@@ -383,10 +380,15 @@ void QVPlayer::searchClicked()
 {
   if( !ui->searchEdit->text().isEmpty() )
   {
-    Vk::Audio::Search *searchRequest = new Vk::Audio::Search(token, ui->searchEdit->text());
-    connect(searchRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
+    if(getAudioRequest != NULL)
+    {
+      getAudioRequest->disconnect();
+      getAudioRequest->deleteLater();
+    }
+    getAudioRequest = new Vk::Audio::Search(token, ui->searchEdit->text());
+    connect(getAudioRequest, SIGNAL(finished(QList<Vk::AudioFile>)), this, SLOT(audioRequestFinished(QList<Vk::AudioFile>)));
     //connect(searchRequest, SIGNAL(finished(QList<Vk::AudioFile>)), searchRequest, SLOT(deleteLater()));
-    searchRequest->exec();
+    getAudioRequest->exec();
     ui->tableView->setEnabled(false);
     ui->status->setText(tr("Search: ") + ui->searchEdit->text());
   }
