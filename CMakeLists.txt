@@ -75,7 +75,7 @@ set(CPACK_PACKAGE_DESCRIPTION "Vkontakte audio player.")
 set(CPACK_GENERATOR "DEB;TBZ2")
 
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Alexey Shmalko")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqtvk (= 0.1.2), phonon, libqt4-network, libqtcore4, libqtgui4")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqtvk (= 0.1.3), phonon, libqt4-network, libqtcore4, libqtgui4")
 set(DEBIAN_PACKAGE_BUILDS_DEPENDS "libphonon-dev")
 set(CPACK_DEBIAN_PACKAGE_SECTION "Sound")
 
