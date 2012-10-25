@@ -332,13 +332,15 @@ void QVPlayer::showHide()
 
 void QVPlayer::closeEvent(QCloseEvent* event)
 {
+#ifndef CLOSE_INSTEAD_OF_HIDE
   if( isVisible() )
   {
     hide();
-#ifndef CLOSE_INSTEAD_OF_HIDE
     event->ignore();
-#endif
   }
+#else
+  QWidget::closeEvent(event);
+#endif
 }
 
 void QVPlayer::audioHome()
